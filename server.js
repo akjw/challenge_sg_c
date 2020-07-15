@@ -7,7 +7,6 @@ const server = express();
 const session = require("express-session");
 const flash = require('connect-flash');
 require("dotenv").config();
-const isLoggedIn = require("./config/loginBlocker");
 
 
 /*
@@ -51,7 +50,7 @@ server.use(function(request, response, next) {
 });
 
 server.use('/auth', require('./routes/auth.route'))
-server.use('/list', isLoggedIn, require('./routes/list.route'))
+server.use('/list', require('./routes/list.route'))
 // app.use('/', isLoggedIn, require('./routes/restaurant.route'))
 
 server.listen(process.env.PORT, () =>

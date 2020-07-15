@@ -41,10 +41,10 @@ router.post(
 );
 
 //--- Logout Route
-router.get("/auth/logout", (request, response) => {
+router.get("/logout", (request, response) => {
   request.logout(); //clear and break session
   request.flash("success", "Dont leave please come back!");
-  response.redirect("auth/signin");
+  response.redirect("/auth/login");
 });
 
 module.exports = router;

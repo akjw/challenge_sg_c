@@ -2,6 +2,8 @@
 const router = require('express').Router();
 const Lists = require('../models/list.model');
 const Users = require('../models/user.model');
+const isLoggedIn = require("../config/loginBlocker");
+
 
 /// DISPLAYING ALL LISTS ---> 
 
@@ -13,21 +15,27 @@ router.get("/", async (req, res) => {
 
 /// CREATING NEW LISTS --->
 
-router.get("/new", async (req, res) => {
+router.get("/new", isLoggedIn, async (req, res) => {
     res.render("list/new");
 })
 
 router.post("/new", async (req, res) => {
-    // This page saves the list
-    let items = [];
-    req.body.item.forEach( (ele, index) => {
-        items.push({
-            name: ele,
-            qty: req.body.qty[index]
-        });
-    })
+    let items;
+    if (typeof req.body.item == Array) {
+        req.body.item.forEach( (ele, index) => {
+            items.push({
+                name: ele,
+                qty: req.body.qty[index]
+            });
+        })
+    }
+    else {
+        items = {
+            name: req.body.item,
+            qty: req.body.qty
+        };
+    }
     try {
-        // action: add in the current user, see below for ref
         let list = await Lists.create({ items: items, ownedBy: req.user._id });
         await Users.findByIdAndUpdate(req.user._id, { $push: { registeredLists: list._id }});
         res.redirect("/list");
@@ -60,12 +68,24 @@ router.post("/help/:id", async (req, res) => {
     catch(err) { console.log(err); }
 })
 
-router.get("/mylists", async (req, res) => {
+router.get("/mylists", isLoggedIn, async (req, res) => {
     console.log("viewing my lists");
     // get all the lists of that particular and render
     try {
-        let user = await Users.findById(req.user._id).populate("ownedBy registeredLists");
+        let user = await Users.findById(req.user._id).populate({
+            path: "registeredLists", 
+            populate: { path: "ownedBy helper", model: "User"}
+        });
         res.render("list/user", { user });
+    }
+    catch(err) { console.log(err); }
+})
+
+router.post("/complete/:id", async (req, res) => {
+    try {
+        await Lists.findByIdAndUpdate(req.params.id, { status: 2 });
+        req.flash("success", "You have fulfilled a task");
+        res.redirect("/list");
     }
     catch(err) { console.log(err); }
 })
