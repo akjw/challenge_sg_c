@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const expressLayouts = require('express-ejs-layouts');
-const app = express();
 const passport = require('./config/passportConfig')
 const server = express();
 const session = require("express-session");
@@ -24,6 +23,7 @@ mongoose.connect(process.env.MONGODBURL, {
 );
 
 /* Middleware */
+server.use(express.static("public"));
 server.use(express.urlencoded({ extended: true })) //collects form data
 server.set('view engine', 'ejs'); //view engine setup
 server.use(expressLayouts);

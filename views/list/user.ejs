@@ -4,7 +4,7 @@ Status: <%= (user.isHelper) ? "Helper" : "Senior" %>
 <% if (user.registeredLists.length == 0 || user.registeredLists == null) { %>
     <h1>There are no lists available!</h1>
 <% } else { %>
-    <h3>This is your registered lists</h3>
+    <h3>Registered list(s)</h3>
     <% user.registeredLists.forEach( list => { %>
         <div>
             <% list.items.forEach( item => { %>

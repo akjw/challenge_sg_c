@@ -1,31 +1,31 @@
 <% if (lists.length == 0 || lists == null) { %>
     <h1>There are no lists available!</h1>
 <% } else { %>
+   <div class="grid">
     <% lists.forEach( list => { %>
-        <div>
+        <div class="card" style="width: 18rem;">
+           <div class="card-body">
+            <h5 class="card-title">Owned by: <%= list.ownedBy.name %> </h5>
             <% list.items.forEach( item => { %>
+                <p class="card-text">
                 <%= item.name %>
                 <%= item.qty %>
+             </p>
             <% }) %>  
-            
         </div>
-        Owned by: <%= list.ownedBy.name %> 
         <% if (list.status == 0) { %>
             <form action="/list/help/<%= list._id %>" method="post">   
                 <button type="submit">Help</button>
             </form>
         <% } else if (list.status == 1) { %> 
-                <p>In progress</p>
+            <h6 class="box-subtitle mb-2 text-muted">In progress</h6>
         <% } else if (list.status == 2) { %>
-                <p>Task has been fulfilled</p>
+            <h6 class="box-subtitle mb-2 text-muted">Task has been fulfilled</h6>
         <% } %>
+    </div>
     <% }) %>
+</div>
 <% } %>
 
-<% if (currentUser != null && currentUser.isSenior == true) { %>
-    <a href="/list/new">Create list</a>
-<% } %>
 
-<% if (currentUser != null) { %>
-    <a href="/list/mylists/">My lists</a>
-<% } %>
+
