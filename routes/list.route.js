@@ -20,20 +20,17 @@ router.get("/new", isLoggedIn, async (req, res) => {
 })
 
 router.post("/new", async (req, res) => {
-    let items;
-    if (typeof req.body.item == Array) {
+    let items = [];
+    if (typeof req.body.item == "string" || typeof req.body.item == String) {
+        items.push({ name: req.body.item, qty: req.body.qty });
+    }
+    else {
         req.body.item.forEach( (ele, index) => {
             items.push({
                 name: ele,
                 qty: req.body.qty[index]
             });
         })
-    }
-    else {
-        items = {
-            name: req.body.item,
-            qty: req.body.qty
-        };
     }
     try {
         let list = await Lists.create({ items: items, ownedBy: req.user._id });
