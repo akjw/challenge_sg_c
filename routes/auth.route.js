@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const User = require('../models/user.model');
 const passport = require("../config/passportConfig");
-const isLoggedIn = require("../config/loginBlocker");
 
 
 //--Register 
@@ -30,14 +29,11 @@ router.get('/login', (req, res) => {
   res.render('auth/signin')
 })
 
-router.get('/success', (req, res) => {
-  res.render('auth/temp')
-})
 
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/auth/success", //after login success
+    successRedirect: "/list", //after login success
     failureRedirect: "/auth/login", //if fail
     failureFlash: "Invalid Username or Password",
     successFlash: "You have logged In!"

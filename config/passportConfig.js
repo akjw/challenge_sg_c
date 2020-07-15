@@ -48,18 +48,13 @@ passport.use(
     },
     function(phone, password, done) {
       User.findOne({ phone: phone }, function(err, user) {
-        if (err) {
-          console.log('error! no input')
-          return done(err)};
+        if (err) return done(err);
 
         // If no user is found // TODO. remove flash message for now
-        if (!user) {
-          console.log('incorrect username')
-          return done(null, false)};
+        if (!user) return done(null, false);
 
         // Check if the password is correct
         if (!user.validPassword(password)) {
-          console.log('incorrect password')
           return done(null, false)};
 
         return done(null, user);

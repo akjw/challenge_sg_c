@@ -7,7 +7,8 @@ const server = express();
 const session = require("express-session");
 const flash = require('connect-flash');
 require("dotenv").config();
-//const checkUser = require("./lib/blockCheck")
+const isLoggedIn = require("./config/loginBlocker");
+
 
 /*
 Connect to MongoDB
@@ -49,11 +50,9 @@ server.use(function(request, response, next) {
   next();
 });
 
-
-//app.use('/user', require('./routes/user.route'))
 server.use('/auth', require('./routes/auth.route'))
-//server.use('/', require('./routes/list.route'))
-// app.use('/', checkUser, require('./routes/restaurant.route'))
+server.use('/list', isLoggedIn, require('./routes/list.route'))
+// app.use('/', isLoggedIn, require('./routes/restaurant.route'))
 
 server.listen(process.env.PORT, () =>
   console.log(`connected to express on ${process.env.PORT}`)

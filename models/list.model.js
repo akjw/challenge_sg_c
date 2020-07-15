@@ -2,19 +2,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const listSchema = Schema({
-    item: {
-        type: String,
-        required: true,
-    },
-    quantity: {
+    items: [{
+        name: String,
+        qty: Number,
+    }],
+    status: {
         type: Number,
-        required: true,
-    }
+        default: 0,
+    },
+    ownedBy: { type: Schema.Types.ObjectId,  ref: "User"},
+    helper: { type: Schema.Types.ObjectId, ref: "User" }
 })
-/* 
-will create and auto update these two fields:
-createdAt:
-updatedAt:
-*/
-const Cuisine = mongoose.model("Cuisine", cuisineSchema)
-module.exports = Cuisine;
+
+const List = mongoose.model("List", listSchema);
+
+module.exports = List;
