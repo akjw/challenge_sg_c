@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+// const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 var userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   phone: {
     type: String,
     required: true
@@ -9,7 +14,28 @@ var userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  isSenior: {
+    type: Boolean,
+    default: false,
+  },
+  isHelper: {
+    type: Boolean,
+    default: false,
+  },
+  registeredLists: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "List"
+  }]
+
 });
 
 userSchema.pre("save", function(next) {
@@ -27,6 +53,8 @@ userSchema.pre("save", function(next) {
 
 userSchema.methods.validPassword = function(password) {
   // Compare is a bcrypt method that will return a boolean,
+  console.log(bcrypt.hashSync(password, 10));
+  console.log(this.password);
   return bcrypt.compareSync(password, this.password);
 };
 

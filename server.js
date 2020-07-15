@@ -1,9 +1,32 @@
 const express = require("express");
+const mongoose = require('mongoose');
+const expressLayouts = require('express-ejs-layouts');
+const app = express();
+const passport = require('./config/passportConfig')
 const server = express();
 const session = require("express-session");
-/*
+const flash = require('connect-flash');
+require("dotenv").config();
+//const checkUser = require("./lib/blockCheck")
 
+/*
+Connect to MongoDB
 */
+mongoose.connect(process.env.MONGODBURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+},
+  () => {
+      console.log('MongoDB connected!')
+  }
+);
+
+/* Middleware */
+server.use(express.urlencoded({ extended: true })) //collects form data
+server.set('view engine', 'ejs'); //view engine setup
+server.use(expressLayouts);
 
 /*-- These must be place in the correct place */
 server.use(
@@ -26,6 +49,12 @@ server.use(function(request, response, next) {
   next();
 });
 
+
+//app.use('/user', require('./routes/user.route'))
+server.use('/auth', require('./routes/auth.route'))
+//server.use('/', require('./routes/list.route'))
+// app.use('/', checkUser, require('./routes/restaurant.route'))
+
 server.listen(process.env.PORT, () =>
-  console.log(`connected to express on ${PORT}`)
+  console.log(`connected to express on ${process.env.PORT}`)
 );
