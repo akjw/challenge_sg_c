@@ -1,11 +1,19 @@
-<form id="form" action="/list/new" method="post">
-    <div id="sub-form">
-        <input type="text" name="item" placeholder="item">
-        <input type="number" name="qty" placeholder="1">
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mt-5 mx-auto">
+            <form id="form" action="/list/new" method="post">
+                <div id="sub-form">
+                    <input type="text" name="item" placeholder="item" class="form-control"/>
+                    <input type="number" name="qty" class="form-control" placeholder="1">
+                </div>
+                <div class="mt-3">
+                    <p class="btn btn-primary btn-block mt-3" id="add">Add new item</p>
+                    <button type="submit" class="btn btn-primary btn-block">Create List</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <p id="add">Add new item</p>
-    <button type="submit">Create list</button>
-</form>
+</div>
 
 <script>
     document.getElementById("add").addEventListener('click', addItem);
@@ -13,6 +21,8 @@
         let input = document.createElement("input");
         let qty = document.createElement("input");
         let div = document.createElement("div");
+        input.classList.add('form-control');
+        qty.classList.add('form-control');
         input.name = "item";
         input.placeholder = "item";
         qty.type = "number";

@@ -22,6 +22,20 @@
             border: 1px solid grey;
             background: pink;
         }
+
+        .card-hover .reveal {
+            visibility: hidden;
+            opacity: 0;
+            height: 0;
+            padding: 0;
+        }
+
+        .card-hover:hover .reveal {
+            height: auto;
+            visibility: visible;
+            opacity: 10;
+            transition: opacity 1s ease;
+        }
     </style>
 </head>
 <body>
@@ -45,17 +59,14 @@
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                  <a class="nav-link" href="/list">Home <span class="sr-only">(current)</span></a>
-                </li>
                 <% if (currentUser != null && currentUser.isSenior == true) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/list/new">Create list</a>
+                        <a class="nav-link" href="/list/new">Create List</a>
                     </li>
                 <% } %>
                   <% if(currentUser){ %>
                     <li class="nav-item">
-                        <a class="nav-link" href="/list/mylists/">My lists</a>
+                        <a class="nav-link" href="/list/mylists/">My Lists</a>
                     </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/auth/logout">Logout</a>

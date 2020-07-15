@@ -1,29 +1,47 @@
-Name: <%= user.name %>
-Status: <%= (user.isHelper) ? "Helper" : "Senior" %>
+<div class="container mt-2">
+<h2 class="mb-4"><%= user.name %>(<%= (user.isHelper) ? "Helper" : "Senior" %>)</h2>
+
 
 <% if (user.registeredLists.length == 0 || user.registeredLists == null) { %>
     <h1>There are no lists available!</h1>
 <% } else { %>
-    <h3>Registered list(s)</h3>
+    <h4>Registered list(s)</h4>
+    <div class="row">
     <% user.registeredLists.forEach( list => { %>
-        <div>
-            <% list.items.forEach( item => { %>
-                <%= item.name %>
-                <%= item.qty %>
-            <% }) %>  
+        <div class="col-md-4">
+            <div class="card mb-4" style="width: 18rem;">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                        <% if (list.status == 1) { %> 
+                            <% if (user.isHelper) { %>   
+                            <li class="nav-item">
+                            <form action="/list/complete/<%= list._id %>" method="post">   
+                                <button class="nav-link active" type="submit">Fulfill</button>
+                            </form>
+                            </li>
+                            <% } else if (user.isSenior) { %> 
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Pending</a>
+                                </li>
+                                <% } %>
+                        <% } else if (list.status == 2) { %> 
+                        <li class="nav-item">
+                            <a class="nav-link disabled"><%= (user.isHelper) ? `You have fulfilled this request.` : `Task fulfilled by ${list.helper.name}` %></a>
+                        </li>
+                        <% } %>
+                    </ul>
+                     </div>
+                     <div class="card-body">
+                    <h5 class="card-title">Posted by: <%= list.ownedBy.name %></h5>  
+                    <% list.items.forEach( item => { %>
+                        <span class="card-text reveal text-truncate">
+                        <%= item.name %> <%= item.qty %>
+                    </span>
+                    <% }) %>  
+                </div>
+            </div>
         </div>
-        Owned by: <%= list.ownedBy.name %> 
-        <% if (list.status == 1) { %> 
-                <p>In progress</p>
-                <form action="/list/complete/<%= list._id %>" method="post">   
-                    <button type="submit">Fulfill</button>
-                </form>    
-        <% } else if (list.status == 2) { %>
-                <p>Congrats! <%= (user.isHelper) ? `You have fulfilled this task.` : `Task has been fulfilled by ${list.helper.name}` %></p>
-        <% } %>
     <% }) %>
 <% } %>
-
-<% if (currentUser != null && currentUser.isSenior == true) { %>
-    <a href="/list/new">Create list</a>
-<% } %>
+</div>
+</div>
