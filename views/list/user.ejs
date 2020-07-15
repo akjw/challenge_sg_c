@@ -19,7 +19,7 @@ Status: <%= (user.isHelper) ? "Helper" : "Senior" %>
                     <button type="submit">Fulfill</button>
                 </form>    
         <% } else if (list.status == 2) { %>
-                <p>Congrats! <%= (user.isHelper) ? "You have fulfilled this task." : "Task has been fulfilled by" (list.helper.name) %></p>
+                <p>Congrats! <%= (user.isHelper) ? `You have fulfilled this task.` : `Task has been fulfilled by ${list.helper.name}` %></p>
         <% } %>
     <% }) %>
 <% } %>
